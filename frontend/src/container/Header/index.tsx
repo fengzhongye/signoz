@@ -100,7 +100,8 @@ function HeaderContainer(): JSX.Element {
 	const { data } = useLicense();
 
 	const isLicenseActive =
-		data?.payload?.find((e) => e.isCurrent)?.status === LICENSE_PLAN_STATUS.VALID;
+		data?.payload?.licenses?.find((e) => e.isCurrent)?.status ===
+		LICENSE_PLAN_STATUS.VALID;
 
 	return (
 		<Header>

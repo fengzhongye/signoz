@@ -5,6 +5,7 @@ import { Logout } from 'api/utils';
 import Spinner from 'components/Spinner';
 import { LOCALSTORAGE } from 'constants/localStorage';
 import ROUTES from 'constants/routes';
+import useLicense from 'hooks/useLicense';
 import { useNotifications } from 'hooks/useNotifications';
 import history from 'lib/history';
 import { ReactChild, useEffect, useMemo } from 'react';
@@ -37,6 +38,11 @@ function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
 			),
 		[pathname],
 	);
+
+	const { data: licensesData } = useLicense();
+
+	const shouldBlockWorkspace = licensesData?.payload?.workSpaceBlock;
+
 	const {
 		isUserFetching,
 		isUserFetchingError,
@@ -64,13 +70,31 @@ function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
 		}
 	};
 
+	const navigateToWorkSpaceBlocked = (route: any): void => {
+		const { path } = route;
+
+		if (path && path !== ROUTES.WORKSPACE_BLOCKED) {
+			history.push(ROUTES.WORKSPACE_BLOCKED);
+		}
+
+		dispatch({
+			type: UPDATE_USER_IS_FETCH,
+			payload: {
+				isUserFetching: false,
+			},
+		});
+	};
+
 	// eslint-disable-next-line sonarjs/cognitive-complexity
 	useEffect(() => {
 		(async (): Promise<void> => {
 			try {
 				const isLocalStorageLoggedIn =
 					getLocalStorageApi(LOCALSTORAGE.IS_LOGGED_IN) === 'true';
-				if (currentRoute) {
+
+				if (shouldBlockWorkspace) {
+					navigateToWorkSpaceBlocked(currentRoute);
+				} else if (currentRoute) {
 					const { isPrivate, key } = currentRoute;
 
 					if (isPrivate) {
@@ -132,7 +156,7 @@ function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
 				} else if (pathname === ROUTES.HOME_PAGE) {
 					// routing to application page over root page
 					if (isLoggedInState) {
-						history.push(ROUTES.APPLICATION);
+						// history.push(ROUTES.APPLICATION);
 					} else {
 						navigateToLoginIfNotLoggedIn();
 					}
@@ -145,7 +169,7 @@ function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
 				history.push(ROUTES.SOMETHING_WENT_WRONG);
 			}
 		})();
-	}, [dispatch, isLoggedInState, currentRoute]);
+	}, [dispatch, isLoggedInState, currentRoute, licensesData]);
 
 	if (isUserFetchingError) {
 		return <Redirect to={ROUTES.SOMETHING_WENT_WRONG} />;

@@ -153,3 +153,11 @@ export const LogsIndexToFields = Loadable(
 export const PipelinePage = Loadable(
 	() => import(/* webpackChunkName: "Pipelines" */ 'pages/Pipelines'),
 );
+
+export const BillingPage = Loadable(
+	() => import(/* webpackChunkName: "BillingPage" */ 'pages/Billing'),
+);
+
+export const WorkspaceBlocked = Loadable(
+	() => import(/* webpackChunkName: "BillingPage" */ 'pages/WorkspaceBlocked'),
+);

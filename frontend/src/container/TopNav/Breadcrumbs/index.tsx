@@ -24,6 +24,8 @@ const breadcrumbNameMap = {
 	[ROUTES.LOGS_EXPLORER]: 'Logs Explorer',
 	[ROUTES.LIVE_LOGS]: 'Live View',
 	[ROUTES.PIPELINES]: 'Pipelines',
+	[ROUTES.BILLING]: 'Billing',
+	[ROUTES.WORKSPACE_BLOCKED]: 'Workspace Blocked',
 };
 
 function ShowBreadcrumbs(props: RouteComponentProps): JSX.Element {

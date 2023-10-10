@@ -80,4 +80,5 @@ export const routePermission: Record<keyof typeof ROUTES, ROLES[]> = {
 	TRACE_EXPLORER: ['ADMIN', 'EDITOR', 'VIEWER'],
 	PIPELINES: ['ADMIN', 'EDITOR', 'VIEWER'],
 	GET_STARTED: ['ADMIN', 'EDITOR', 'VIEWER'],
+	WORKSPACE_BLOCKED: ['ADMIN', 'EDITOR', 'VIEWER'],
 };

@@ -25,6 +25,7 @@ const interceptorsRequestResponse = (
 		'';
 
 	value.headers.Authorization = token ? `Bearer ${token}` : '';
+	value.headers['ngrok-skip-browser-warning'] = true;
 
 	return value;
 };
