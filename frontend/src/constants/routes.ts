@@ -39,7 +39,7 @@ const ROUTES = {
 	TRACE_EXPLORER: '/trace-explorer',
 	PIPELINES: '/pipelines',
 	BILLING: '/billing',
-	WORKSPACE_BLOCKED: '/workspace_blocked',
+	WORKSPACE_LOCKED: '/workspace-locked',
 };
 
 export default ROUTES;

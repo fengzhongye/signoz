@@ -91,13 +91,32 @@ const dummyColumns: ColumnsType<DataType> = [
 	},
 ];
 
+export const getRemainingDays = (billingEndDate: number): number => {
+	// Convert Epoch timestamps to Date objects
+	const startDate = new Date(); // Convert seconds to milliseconds
+	const endDate = new Date(billingEndDate * 1000); // Convert seconds to milliseconds
+
+	// Calculate the time difference in milliseconds
+	const timeDifference = endDate - startDate;
+
+	return Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+};
+
+export const getFormattedDate = (date: number): string => {
+	const trailEndDate = new Date(date * 1000);
+
+	const options = { day: 'numeric', month: 'short', year: 'numeric' };
+
+	return trailEndDate.toLocaleDateString(undefined, options);
+};
+
 export default function BillingContainer(): JSX.Element {
 	const daysRemainingStr = 'days remaining in your billing period.';
 	const [headerText, setHeaderText] = useState('');
 	const [billAmount, setBillAmount] = useState(0);
 	const [totalBillAmount, setTotalBillAmount] = useState(0);
 	const [activeLicense, setActiveLicense] = useState<License | null>(null);
-	const [daysRemaning, setDaysRemaning] = useState(0);
+	const [daysRemaining, setDaysRemaining] = useState(0);
 	const [isFreeTrail, setIsFreeTrail] = useState(false);
 	const [data, setData] = useState<any[]>([]);
 	const billCurrency = '$';
@@ -119,25 +138,6 @@ export default function BillingContainer(): JSX.Element {
 		},
 	);
 
-	const getFormattedDate = (date: number): string => {
-		const trailEndDate = new Date(date * 1000);
-
-		const options = { day: 'numeric', month: 'short', year: 'numeric' };
-
-		return trailEndDate.toLocaleDateString(undefined, options);
-	};
-
-	const getRemainingDays = (BillingEndDate: number): number => {
-		// Convert Epoch timestamps to Date objects
-		const startDate = new Date(); // Convert seconds to milliseconds
-		const endDate = new Date(BillingEndDate * 1000); // Convert seconds to milliseconds
-
-		// Calculate the time difference in milliseconds
-		const timeDifference = endDate - startDate;
-
-		return Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-	};
-
 	useEffect(() => {
 		const activeValidLicense =
 			licensesData?.payload?.licenses?.find(
@@ -149,7 +149,7 @@ export default function BillingContainer(): JSX.Element {
 		if (!isFetching && licensesData?.payload?.onTrial && !licenseError) {
 			setIsFreeTrail(true);
 			setBillAmount(0);
-			setDaysRemaning(0);
+			setDaysRemaining(0);
 			setHeaderText(
 				`You are in free trial period. Your free trial will end on ${getFormattedDate(
 					licensesData?.payload?.trialEnd,
@@ -160,7 +160,6 @@ export default function BillingContainer(): JSX.Element {
 
 	const processUsageData = useCallback(
 		(data: any): void => {
-			console.log('data', data);
 			const {
 				details: { breakdown = [], total },
 				billingPeriodStart,
@@ -172,10 +171,13 @@ export default function BillingContainer(): JSX.Element {
 				const element = breakdown[index];
 
 				element?.tiers.forEach(
-					(tier: { quantity: any; unitPrice: any; tierCost: number }, i: any) => {
+					(
+						tier: { quantity: number; unitPrice: number; tierCost: number },
+						i: number,
+					) => {
 						formattedUsageData.push({
 							key: `${index}${i}`,
-							name: element?.type,
+							name: i === 0 ? element?.type : '',
 							unit: element?.unit,
 							dataIngested: tier.quantity,
 							pricePerUnit: tier.unitPrice,
@@ -184,8 +186,6 @@ export default function BillingContainer(): JSX.Element {
 					},
 				);
 			}
-
-			console.log('formattedUsageData', formattedUsageData);
 
 			setData(formattedUsageData);
 			setTotalBillAmount(total);
@@ -196,7 +196,7 @@ export default function BillingContainer(): JSX.Element {
 						billingPeriodStart,
 					)} to ${getFormattedDate(billingPeriodEnd)}`,
 				);
-				setDaysRemaning(getRemainingDays(billingPeriodEnd));
+				setDaysRemaining(getRemainingDays(billingPeriodEnd));
 				setBillAmount(total);
 			}
 		},
@@ -256,7 +256,7 @@ export default function BillingContainer(): JSX.Element {
 		</Table.Summary.Row>
 	);
 
-	const renderTableSekelton = (): JSX.Element => (
+	const renderTableSkeleton = (): JSX.Element => (
 		<Table
 			dataSource={dummyData}
 			pagination={false}
@@ -334,7 +334,7 @@ export default function BillingContainer(): JSX.Element {
 				</Typography.Title>
 
 				<Typography.Paragraph style={{ margin: '16px 0' }}>
-					{daysRemaning} {daysRemainingStr}
+					{daysRemaining} {daysRemainingStr}
 				</Typography.Paragraph>
 			</div>
 
@@ -348,7 +348,7 @@ export default function BillingContainer(): JSX.Element {
 					/>
 				)}
 
-				{isLoading && renderTableSekelton()}
+				{isLoading && renderTableSkeleton()}
 			</div>
 
 			{isFreeTrail && (

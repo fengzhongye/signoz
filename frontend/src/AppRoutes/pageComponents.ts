@@ -159,5 +159,6 @@ export const BillingPage = Loadable(
 );
 
 export const WorkspaceBlocked = Loadable(
-	() => import(/* webpackChunkName: "BillingPage" */ 'pages/WorkspaceBlocked'),
+	() =>
+		import(/* webpackChunkName: "WorkspaceLocked" */ 'pages/WorkspaceLocked'),
 );

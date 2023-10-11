@@ -25,7 +25,7 @@ const breadcrumbNameMap = {
 	[ROUTES.LIVE_LOGS]: 'Live View',
 	[ROUTES.PIPELINES]: 'Pipelines',
 	[ROUTES.BILLING]: 'Billing',
-	[ROUTES.WORKSPACE_BLOCKED]: 'Workspace Blocked',
+	[ROUTES.WORKSPACE_LOCKED]: 'Workspace Locked',
 };
 
 function ShowBreadcrumbs(props: RouteComponentProps): JSX.Element {
@@ -52,7 +52,7 @@ function ShowBreadcrumbs(props: RouteComponentProps): JSX.Element {
 
 	const breadcrumbItems = [
 		<Breadcrumb.Item key="home">
-			<Link to="/">Home</Link>
+			<Link to="/services">Home</Link>
 		</Breadcrumb.Item>,
 	].concat(extraBreadcrumbItems);
 

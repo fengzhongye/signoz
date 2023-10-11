@@ -35,6 +35,6 @@
 	"HOME_PAGE": "Open source Observability Platform | SigNoz",
 	"PASSWORD_RESET": "SigNoz | Password Reset",
 	"LIST_LICENSES": "SigNoz | List of Licenses",
-	"WORKSPACE_BLOCKED": "SigNoz | Workspace Blocked",
+	"WORKSPACE_LOCKED": "SigNoz | Workspace Locked",
 	"DEFAULT": "Open source Observability Platform | SigNoz"
 }

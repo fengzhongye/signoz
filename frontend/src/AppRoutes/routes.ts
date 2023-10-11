@@ -1,5 +1,5 @@
 import ROUTES from 'constants/routes';
-import WorkspaceBlocked from 'pages/WorkspaceBlocked';
+import WorkspaceBlocked from 'pages/WorkspaceLocked';
 import { RouteProps } from 'react-router-dom';
 
 import {
@@ -296,11 +296,11 @@ const routes: AppRoutes[] = [
 		isPrivate: true,
 	},
 	{
-		path: ROUTES.WORKSPACE_BLOCKED,
+		path: ROUTES.WORKSPACE_LOCKED,
 		exact: true,
 		component: WorkspaceBlocked,
 		isPrivate: false,
-		key: 'WORKSPACE_BLOCKED',
+		key: 'WORKSPACE_LOCKED',
 	},
 ];
 

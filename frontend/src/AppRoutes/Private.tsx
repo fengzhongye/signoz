@@ -73,8 +73,8 @@ function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
 	const navigateToWorkSpaceBlocked = (route: any): void => {
 		const { path } = route;
 
-		if (path && path !== ROUTES.WORKSPACE_BLOCKED) {
-			history.push(ROUTES.WORKSPACE_BLOCKED);
+		if (path && path !== ROUTES.WORKSPACE_LOCKED) {
+			history.push(ROUTES.WORKSPACE_LOCKED);
 		}
 
 		dispatch({

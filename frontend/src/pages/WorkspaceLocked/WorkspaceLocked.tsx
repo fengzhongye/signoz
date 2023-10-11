@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import './WorkspaceBlocked.styles.scss';
+import './WorkspaceLocked.styles.scss';
 
 import { CreditCardOutlined, LockOutlined } from '@ant-design/icons';
 import { Button, Card, Typography } from 'antd';
@@ -23,12 +23,15 @@ export default function WorkspaceBlocked(): JSX.Element {
 		setActiveLicense(activeValidLicense);
 	}, [isFetching, licensesData]);
 
-	const { mutate: updateCreditCard } = useMutation(updateCreditCardApi, {
-		onSuccess: (data) => {
-			window.open(data.payload?.redirectURL);
+	const { mutate: updateCreditCard, isLoading } = useMutation(
+		updateCreditCardApi,
+		{
+			onSuccess: (data) => {
+				window.open(data.payload?.redirectURL);
+			},
+			onError: () => console.log('error'),
 		},
-		onError: () => console.log('error'),
-	});
+	);
 
 	const handleUpdateCreditCard = useCallback(async () => {
 		updateCreditCard({
@@ -55,6 +58,7 @@ export default function WorkspaceBlocked(): JSX.Element {
 				type="primary"
 				icon={<CreditCardOutlined />}
 				size="middle"
+				loading={isLoading}
 				onClick={handleUpdateCreditCard}
 			>
 				Update Credit Card
